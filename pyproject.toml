@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.9"
 Pillow = "^10.1.0"
+tomli = "^2.0.1"
 
 [tool.poetry.group.lint]
 optional = true
