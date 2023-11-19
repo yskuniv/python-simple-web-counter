@@ -3,7 +3,7 @@ from email.mime.image import MIMEImage
 from functools import partial
 from io import BytesIO
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from PIL import Image  # type: ignore
 
@@ -19,8 +19,16 @@ def get_host_info_from_request(req: Request) -> str:
         return f"{req.options['REMOTE_ADDR']}/{req.headers['X-Forwarded-For']}"
 
 
-def read_last_row_from_datafile(path: Path) -> Optional[List[str]]:
-    return read_last_row_from_tsv(path=path)
+def read_last_row_from_datafile(
+    path: Path,
+) -> Optional[List[Union[int, datetime, str]]]:
+    row = read_last_row_from_tsv(path=path)
+    if row is None:
+        return None
+    else:
+        count_str, dt_str, host, client, referer = row
+
+        return [int(count_str), datetime.fromisoformat(dt_str), host, client, referer]
 
 
 def write_row_to_datafile(
