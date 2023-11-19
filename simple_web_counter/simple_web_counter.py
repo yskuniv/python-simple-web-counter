@@ -54,6 +54,8 @@ def main() -> None:
         images_base_dir=cfg.images.base_dir,
         images_filename=cfg.images.filename,
         height=height,
+        mode="RGB",
+        format="PNG",
         count=count,
     )
 
