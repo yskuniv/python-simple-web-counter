@@ -22,8 +22,8 @@ def count_access_and_output_counter_image_as_mime(
     client = req.headers["User-Agent"]
     referer = req.headers["Referer"]
 
-    datafile = req.params["datafile"]
-    height = req.params["height"]
+    datafile = req.params["datafile"][0]
+    height = req.params["height"][0]
 
     last_row = read_last_row_from_datafile(path=Path(cfg.data.out_dir) / datafile)
 
