@@ -1,5 +1,7 @@
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
+
+from pytz import timezone
 
 from simple_web_counter import config
 from simple_web_counter.utils import cgi
@@ -37,9 +39,10 @@ def output_counter_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
     else:
         count = last_count + 1
 
-        dt = datetime.now(
-            tz=timezone(offset=timedelta(hours=9))
-        )  # FIXME: fix to avoid hard-coding timezone
+        if cfg.datetime.timezone:
+            dt = datetime.now(tz=timezone(cfg.datetime.timezone))
+        else:
+            dt = datetime.utcnow()
 
         write_row_to_datafile(
             path=cfg.data.out_dir / datafile,
