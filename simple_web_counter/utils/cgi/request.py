@@ -12,19 +12,19 @@ class RequestMethod(Enum):
 
 
 class Request:
-    def __init__(self, environ: Dict[str, str]) -> None:
-        self._method = RequestMethod(environ["REQUEST_METHOD"])
-        self._path = environ["REQUEST_URI"]
-        self._params = urllib.parse.parse_qs(environ["QUERY_STRING"])
-        self._data = cast(Tuple[dict, dict], multipart.parse_form_data(environ))
+    def __init__(self, env: Dict[str, str]) -> None:
+        self._method = RequestMethod(env["REQUEST_METHOD"])
+        self._path = env["REQUEST_URI"]
+        self._params = urllib.parse.parse_qs(env["QUERY_STRING"])
+        self._data = cast(Tuple[dict, dict], multipart.parse_form_data(env))
         self._headers = {
-            "User-Agent": environ.get("HTTP_USER_AGENT"),
-            "Referer": environ.get("HTTP_REFERER"),
-            "X-Forwarded-For": environ.get("HTTP_X_FORWARDED_FOR"),
+            "User-Agent": env.get("HTTP_USER_AGENT"),
+            "Referer": env.get("HTTP_REFERER"),
+            "X-Forwarded-For": env.get("HTTP_X_FORWARDED_FOR"),
         }
         self._options = {
-            "REMOTE_HOST": environ.get("REMOTE_HOST"),
-            "REMOTE_ADDR": environ.get("REMOTE_ADDR"),
+            "REMOTE_HOST": env.get("REMOTE_HOST"),
+            "REMOTE_ADDR": env.get("REMOTE_ADDR"),
         }
 
     @property
