@@ -10,11 +10,7 @@ from simple_web_counter.utils.counter_helper import (
 from simple_web_counter.utils.file import add_row_to_tsv, read_last_row_from_tsv
 
 
-def main() -> None:
-    cfg = config.load()
-
-    req = cgi.Request(env=dict(os.environ))
-
+def output_counter_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
     if req != cgi.RequestMethod.GET:
         raise  # TODO: raise a proper exception
 
@@ -60,3 +56,10 @@ def main() -> None:
     )
 
     print(image_mime)
+
+
+def main() -> None:
+    cfg = config.load()
+    req = cgi.Request(env=dict(os.environ))
+
+    output_counter_image_as_mime(cfg, req)
