@@ -28,8 +28,8 @@ def output_counter_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
         last_count, _, last_host, last_client, _ = last_row
     else:
         last_count = 0
-        last_host = ""
-        last_client = ""
+        last_host = None
+        last_client = None
 
     # To prevent to count or record accesses from the same host or client
     if host == last_host and client == last_client:
