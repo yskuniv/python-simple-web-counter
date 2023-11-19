@@ -25,8 +25,7 @@ def output_counter_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
     last_row = read_last_row_from_datafile(path=cfg.data.out_dir / datafile)
 
     if last_row:
-        last_count_str, _, last_host, last_client, _ = last_row
-        last_count = int(last_count_str)
+        last_count, _, last_host, last_client, _ = last_row
     else:
         last_count = 0
         last_host = ""
