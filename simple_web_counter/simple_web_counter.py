@@ -34,6 +34,7 @@ def main() -> None:
         last_host = ""
         last_client = ""
 
+    # To prevent to count an access from the same host or client
     if host == last_host and client == last_client:
         count = last_count
     else:
