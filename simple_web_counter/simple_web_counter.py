@@ -6,8 +6,9 @@ from simple_web_counter.utils import cgi
 from simple_web_counter.utils.counter_helper import (
     generate_counter_image_as_mime,
     get_host_info_from_request,
+    read_last_row_from_datafile,
+    write_row_to_datafile,
 )
-from simple_web_counter.utils.file import add_row_to_tsv, read_last_row_from_tsv
 
 
 def output_counter_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
@@ -21,7 +22,7 @@ def output_counter_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
     datafile = req.params["datafile"]
     height = req.params["height"]
 
-    last_row = read_last_row_from_tsv(path=cfg.data.out_dir / datafile)
+    last_row = read_last_row_from_datafile(path=cfg.data.out_dir / datafile)
 
     if last_row:
         last_count_str, _, last_host, last_client, _ = last_row
@@ -41,9 +42,13 @@ def output_counter_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
             tz=timezone(offset=timedelta(hours=9))
         )  # FIXME: fix to avoid hard-coding timezone
 
-        add_row_to_tsv(
+        write_row_to_datafile(
             path=cfg.data.out_dir / datafile,
-            row=[count, dt.isoformat(), host, client, referer],
+            count=count,
+            dt=dt,
+            host=host,
+            client=client,
+            referer=referer,
         )
 
     image_mime = generate_counter_image_as_mime(
