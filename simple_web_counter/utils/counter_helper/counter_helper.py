@@ -5,6 +5,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import List, Optional, Union
 
+import pytz
 from PIL import Image  # type: ignore
 
 from simple_web_counter.utils.cgi import Request
@@ -17,6 +18,15 @@ def get_host_info_from_request(req: Request) -> str:
         return req.options["REMOTE_HOST"]
     else:
         return f"{req.options['REMOTE_ADDR']}/{req.headers['X-Forwarded-For']}"
+
+
+def get_datetime_now(zone: Optional[str]) -> datetime:
+    if zone:
+        tz = pytz.timezone(zone)
+    else:
+        tz = pytz.utc
+
+    return datetime.now(tz=tz)
 
 
 def read_last_row_from_datafile(
