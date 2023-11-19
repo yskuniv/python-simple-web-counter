@@ -14,7 +14,7 @@ from simple_web_counter.utils.counter_helper import (
 def count_access_and_output_counter_image_as_mime(
     cfg: config.Config, req: cgi.Request
 ) -> None:
-    if req != cgi.RequestMethod.GET:
+    if req.method != cgi.RequestMethod.GET:
         raise  # TODO: raise a proper exception
 
     host = get_host_info_from_request(req)
