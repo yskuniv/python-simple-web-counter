@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 
 import tomli
 
@@ -16,9 +16,14 @@ class ConfigDataSection(NamedTuple):
     out_dir: str
 
 
+class ConfigDatetimeSection(NamedTuple):
+    timezone: Optional[str]
+
+
 class Config(NamedTuple):
     images: ConfigImagesSection
     data: ConfigDataSection
+    datetime: ConfigDatetimeSection
 
 
 def load(config_dir: str = DEFAULT_CONFIG_DIR) -> Config:
@@ -33,4 +38,7 @@ def load(config_dir: str = DEFAULT_CONFIG_DIR) -> Config:
                 filename=config["images"]["filename"],
             ),
             data=ConfigDataSection(out_dir=config["data"]["out_dir"]),
+            datetime=ConfigDatetimeSection(
+                timezone=config.get("datetime") and config["datetime"].get("timezone"),
+            ),
         )
