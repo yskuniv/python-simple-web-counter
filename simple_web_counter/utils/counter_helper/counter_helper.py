@@ -17,7 +17,12 @@ def get_host_info_from_request(request: Request) -> str:
 
 
 def generate_counter_image_as_mime(
-    images_base_dir: Path, images_filename: str, height: int, count: int
+    images_base_dir: Path,
+    images_filename: str,
+    height: int,
+    mode: str,
+    format: str,
+    count: int,
 ) -> str:
     count_str = str(count)
 
@@ -26,11 +31,11 @@ def generate_counter_image_as_mime(
             partial(get_image_of_number, images_base_dir, images_filename, height),
             count_str,
         ),
-        mode="RGB",
+        mode=mode,
     )
 
     io = BytesIO()
-    image.save(fp=io, format="PNG")
+    image.save(fp=io, format=format)
     image_mime = MIMEImage(io.getvalue())
 
     image_mime_str = str(image_mime)
