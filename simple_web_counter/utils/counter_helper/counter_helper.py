@@ -9,11 +9,11 @@ from simple_web_counter.utils.cgi import Request
 from simple_web_counter.utils.image import concat_images, resize_image_to_height
 
 
-def get_host_info_from_request(request: Request) -> str:
-    if request.options["REMOTE_HOST"]:
-        return request.options["REMOTE_HOST"]
+def get_host_info_from_request(req: Request) -> str:
+    if req.options["REMOTE_HOST"]:
+        return req.options["REMOTE_HOST"]
     else:
-        return f"{request.options['REMOTE_ADDR']}/{request.headers['X-Forwarded-For']}"
+        return f"{req.options['REMOTE_ADDR']}/{req.headers['X-Forwarded-For']}"
 
 
 def generate_counter_image_as_mime(
