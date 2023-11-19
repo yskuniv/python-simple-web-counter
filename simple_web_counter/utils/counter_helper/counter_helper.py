@@ -3,7 +3,7 @@ from email.mime.image import MIMEImage
 from functools import partial
 from io import BytesIO
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Optional, Tuple
 
 import pytz
 from PIL import Image  # type: ignore
@@ -31,14 +31,14 @@ def get_datetime_now(zone: Optional[str]) -> datetime:
 
 def read_last_row_from_datafile(
     path: Path,
-) -> Optional[List[Union[int, datetime, str]]]:
+) -> Optional[Tuple[int, datetime, str, str, str]]:
     row = read_last_row_from_tsv(path=path)
     if row is None:
         return None
     else:
         count_str, dt_str, host, client, referer = row
 
-        return [int(count_str), datetime.fromisoformat(dt_str), host, client, referer]
+        return (int(count_str), datetime.fromisoformat(dt_str), host, client, referer)
 
 
 def write_row_to_datafile(
