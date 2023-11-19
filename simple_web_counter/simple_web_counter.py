@@ -1,12 +1,10 @@
 import os
-from datetime import datetime, timezone
-
-import pytz
 
 from simple_web_counter import config
 from simple_web_counter.utils import cgi
 from simple_web_counter.utils.counter_helper import (
     generate_counter_image_as_mime,
+    get_datetime_now,
     get_host_info_from_request,
     read_last_row_from_datafile,
     write_row_to_datafile,
@@ -41,12 +39,7 @@ def count_access_and_output_counter_image_as_mime(
     else:
         count = last_count + 1
 
-        if cfg.datetime.timezone:
-            tz = pytz.timezone(cfg.datetime.timezone)
-        else:
-            tz = timezone.utc
-
-        dt = datetime.now(tz=tz)
+        dt = get_datetime_now(zone=cfg.datetime.timezone)
 
         write_row_to_datafile(
             path=cfg.data.out_dir / datafile,
