@@ -47,8 +47,8 @@ def count_access_and_output_counter_image_as_mime(
             count=count,
             dt=dt,
             host=host,
-            client=client,
-            referer=referer,
+            client=client or "",
+            referer=referer or "",
         )
 
     image_mime = generate_counter_image_as_mime(
