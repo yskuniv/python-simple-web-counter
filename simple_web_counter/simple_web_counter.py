@@ -16,6 +16,7 @@ def output_counter_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
 
     host = get_host_info_from_request(req)
     client = req.headers["User-Agent"]
+    referer = req.headers["Referer"]
 
     datafile = req.params["datafile"]
     height = req.params["height"]
@@ -39,7 +40,6 @@ def output_counter_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
         dt = datetime.now(
             tz=timezone(offset=timedelta(hours=9))
         )  # FIXME: fix to avoid hard-coding timezone
-        referer = req.headers["Referer"]
 
         add_row_to_tsv(
             path=cfg.data.out_dir / datafile,
