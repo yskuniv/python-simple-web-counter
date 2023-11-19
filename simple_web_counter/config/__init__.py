@@ -1,3 +1,3 @@
-from .config import load
+from .config import Config, load
 
-__all__ = ["load"]
+__all__ = ["Config", "load"]
