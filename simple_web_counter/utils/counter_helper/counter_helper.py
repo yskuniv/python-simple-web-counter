@@ -1,11 +1,14 @@
+from datetime import datetime
 from email.mime.image import MIMEImage
 from functools import partial
 from io import BytesIO
 from pathlib import Path
+from typing import List, Optional
 
 from PIL import Image  # type: ignore
 
 from simple_web_counter.utils.cgi import Request
+from simple_web_counter.utils.file import add_row_to_tsv, read_last_row_from_tsv
 from simple_web_counter.utils.image import concat_images, resize_image_to_height
 
 
@@ -14,6 +17,16 @@ def get_host_info_from_request(req: Request) -> str:
         return req.options["REMOTE_HOST"]
     else:
         return f"{req.options['REMOTE_ADDR']}/{req.headers['X-Forwarded-For']}"
+
+
+def read_last_row_from_datafile(path: Path) -> Optional[List[str]]:
+    return read_last_row_from_tsv(path=path)
+
+
+def write_row_to_datafile(
+    path: Path, count: int, dt: datetime, host: str, client: str, referer: str
+) -> None:
+    add_row_to_tsv(path=path, row=[str(count), dt.isoformat(), host, client, referer])
 
 
 def generate_counter_image_as_mime(
