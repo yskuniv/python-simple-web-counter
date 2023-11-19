@@ -42,9 +42,11 @@ def count_access_and_output_counter_image_as_mime(
         count = last_count + 1
 
         if cfg.datetime.timezone:
-            dt = datetime.now(tz=pytz.timezone(cfg.datetime.timezone))
+            tz = pytz.timezone(cfg.datetime.timezone)
         else:
-            dt = datetime.now(tz=timezone.utc)
+            tz = timezone.utc
+
+        dt = datetime.now(tz=tz)
 
         write_row_to_datafile(
             path=cfg.data.out_dir / datafile,
