@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from simple_web_counter import config
 from simple_web_counter.utils import cgi
@@ -24,7 +25,7 @@ def count_access_and_output_counter_image_as_mime(
     datafile = req.params["datafile"]
     height = req.params["height"]
 
-    last_row = read_last_row_from_datafile(path=cfg.data.out_dir / datafile)
+    last_row = read_last_row_from_datafile(path=Path(cfg.data.out_dir) / datafile)
 
     if last_row:
         last_count, _, last_host, last_client, _ = last_row
@@ -42,7 +43,7 @@ def count_access_and_output_counter_image_as_mime(
         dt = get_datetime_now(zone=cfg.datetime.timezone)
 
         write_row_to_datafile(
-            path=cfg.data.out_dir / datafile,
+            path=Path(cfg.data.out_dir) / datafile,
             count=count,
             dt=dt,
             host=host,
@@ -51,7 +52,7 @@ def count_access_and_output_counter_image_as_mime(
         )
 
     image_mime = generate_counter_image_as_mime(
-        images_base_dir=cfg.images.base_dir,
+        images_base_dir=Path(cfg.images.base_dir),
         images_filename=cfg.images.filename,
         height=height,
         mode="RGB",
