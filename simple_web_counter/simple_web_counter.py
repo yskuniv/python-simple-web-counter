@@ -80,4 +80,4 @@ def main() -> None:
         count=count,
     )
 
-    print(image_mime)
+    print(image_mime, end="")
