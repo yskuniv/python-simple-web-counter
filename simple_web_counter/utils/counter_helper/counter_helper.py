@@ -81,6 +81,6 @@ def get_image_of_number(
     image_path = images_base_dir / filename
 
     image = Image.open(image_path)
-    resize_image_to_height(image=image_path, height=height)
+    resize_image_to_height(image=image, height=height)
 
     return image
