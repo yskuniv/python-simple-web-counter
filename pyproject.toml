@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "simple-web-counter"
 version = "0.1.0"
-description = ""
+description = "A simple web counter written in Python."
 authors = ["ysk <ysk.univ.1007@gmail.com>"]
 license = "MIT"
 readme = "README.md"
