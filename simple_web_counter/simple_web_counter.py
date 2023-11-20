@@ -102,4 +102,31 @@ def main() -> None:
     cfg = config.load()
     req = cgi.Request(env=dict(os.environ))
 
-    count_access_and_output_image_as_mime(cfg, req)
+    if req.method != cgi.RequestMethod.GET:
+        raise  # TODO: raise a proper exception
+
+    host = get_host_info_from_request(req)
+    client = req.headers["User-Agent"]
+    referer = req.headers["Referer"]
+
+    datafile = req.params["datafile"][0]
+    height = int(req.params["height"][0])
+
+    count = count_and_record_access(
+        datafile_path=Path(cfg.data.out_dir) / datafile,
+        timezone=cfg.datetime.timezone,
+        host=host,
+        client=client,
+        referer=referer,
+    )
+
+    image_mime = generate_counter_image_as_mime(
+        images_base_dir=Path(cfg.images.base_dir),
+        images_filename=cfg.images.filename,
+        height=height,
+        mode="RGB",
+        format="PNG",
+        count=count,
+    )
+
+    print(image_mime)
