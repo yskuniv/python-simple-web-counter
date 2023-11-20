@@ -8,10 +8,10 @@ from simple_web_counter.errors import Http400Error
 from simple_web_counter.simple_web_counter import count_and_record_access, parse_request
 from simple_web_counter.utils import cgi
 
-DUMMY_REQUEST_URI = "DUMMY_REQUEST_URI"
+DUMMY_URI = "DUMMY_REQUEST_URI"
 DUMMY_USER_AGENT = "DUMMY_USER_AGENT"
 DUMMY_REFERER = "DUMMY_REFERER"
-DUMMY_REMOTE_HOST = "DUMMY_REMOTE_HOST"
+DUMMY_HOST = "DUMMY_REMOTE_HOST"
 DUMMY_DATETIME = datetime.fromisoformat("1970-01-01T00:00:00+09:00")
 DUMMY_DATAFILE_PATH = Path("DUMMY_DATAFILE_PATH")
 
@@ -23,16 +23,16 @@ def test_parse_request_in_case_of_request_correctly() -> None:
     req = cgi.Request(
         env={
             "REQUEST_METHOD": "GET",
-            "REQUEST_URI": DUMMY_REQUEST_URI,
+            "REQUEST_URI": DUMMY_URI,
             "QUERY_STRING": f"datafile={datafile}&height={height}",
             "HTTP_USER_AGENT": DUMMY_USER_AGENT,
             "HTTP_REFERER": DUMMY_REFERER,
-            "REMOTE_HOST": DUMMY_REMOTE_HOST,
+            "REMOTE_HOST": DUMMY_HOST,
         }
     )
 
     assert parse_request(req=req) == (
-        DUMMY_REMOTE_HOST,
+        DUMMY_HOST,
         DUMMY_USER_AGENT,
         DUMMY_REFERER,
         datafile,
@@ -47,11 +47,11 @@ def test_parse_request_in_case_of_request_method_is_invalid() -> None:
     req = cgi.Request(
         env={
             "REQUEST_METHOD": "POST",
-            "REQUEST_URI": DUMMY_REQUEST_URI,
+            "REQUEST_URI": DUMMY_URI,
             "QUERY_STRING": f"datafile={datafile}&height={height}",
             "HTTP_USER_AGENT": DUMMY_USER_AGENT,
             "HTTP_REFERER": DUMMY_REFERER,
-            "REMOTE_HOST": DUMMY_REMOTE_HOST,
+            "REMOTE_HOST": DUMMY_HOST,
         }
     )
 
@@ -66,11 +66,11 @@ def test_parse_request_in_case_of_height_in_query_string_is_invalid() -> None:
     req = cgi.Request(
         env={
             "REQUEST_METHOD": "GET",
-            "REQUEST_URI": DUMMY_REQUEST_URI,
+            "REQUEST_URI": DUMMY_URI,
             "QUERY_STRING": f"datafile={datafile}&height={height}",
             "HTTP_USER_AGENT": DUMMY_USER_AGENT,
             "HTTP_REFERER": DUMMY_REFERER,
-            "REMOTE_HOST": DUMMY_REMOTE_HOST,
+            "REMOTE_HOST": DUMMY_HOST,
         }
     )
 
@@ -82,11 +82,11 @@ def test_parse_request_in_case_of_query_string_missing() -> None:
     req = cgi.Request(
         env={
             "REQUEST_METHOD": "GET",
-            "REQUEST_URI": DUMMY_REQUEST_URI,
+            "REQUEST_URI": DUMMY_URI,
             "QUERY_STRING": "",
             "HTTP_USER_AGENT": DUMMY_USER_AGENT,
             "HTTP_REFERER": DUMMY_REFERER,
-            "REMOTE_HOST": DUMMY_REMOTE_HOST,
+            "REMOTE_HOST": DUMMY_HOST,
         }
     )
 
