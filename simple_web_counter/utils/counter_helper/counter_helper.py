@@ -42,9 +42,18 @@ def read_last_row_from_datafile(
 
 
 def write_row_to_datafile(
-    path: Path, count: int, dt: datetime, host: str, client: str, referer: str
+    path: Path,
+    count: int,
+    dt: datetime,
+    host: str,
+    client: str,
+    referer: str,
+    timespec: str = "seconds",
 ) -> None:
-    add_row_to_tsv(path=path, row=[str(count), dt.isoformat(), host, client, referer])
+    add_row_to_tsv(
+        path=path,
+        row=[str(count), dt.isoformat(timespec=timespec), host, client, referer],
+    )
 
 
 def generate_counter_image_as_mime(
