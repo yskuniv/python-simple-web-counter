@@ -18,7 +18,7 @@ DUMMY_DATAFILE_PATH = Path("DUMMY_DATAFILE_PATH")
 
 def test_parse_request_in_case_of_request_correctly() -> None:
     datafile = "dummy.txt"
-    height = 48
+    height = 24
 
     req = cgi.Request(
         env={
@@ -42,7 +42,7 @@ def test_parse_request_in_case_of_request_correctly() -> None:
 
 def test_parse_request_in_case_of_request_method_is_invalid() -> None:
     datafile = "dummy.txt"
-    height = 48
+    height = 24
 
     req = cgi.Request(
         env={
