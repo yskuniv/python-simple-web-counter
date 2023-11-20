@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Optional
 
 from simple_web_counter import config
 from simple_web_counter.utils import cgi
@@ -10,6 +11,42 @@ from simple_web_counter.utils.counter_helper import (
     read_last_row_from_datafile,
     write_row_to_datafile,
 )
+
+
+def count_and_record_access(
+    datafile_path: Path,
+    timezone: Optional[str],
+    host: str,
+    client: Optional[str],
+    referer: Optional[str],
+) -> int:
+    last_row = read_last_row_from_datafile(path=datafile_path)
+
+    if last_row:
+        last_count, _, last_host, last_client, _ = last_row
+    else:
+        last_count = 0
+        last_host = None
+        last_client = None
+
+    # To prevent to count or record accesses from the same host or client
+    if host == last_host and client == last_client:
+        return last_count
+    else:
+        new_count = last_count + 1
+
+        dt = get_datetime_now(zone=timezone)
+
+        write_row_to_datafile(
+            path=datafile_path,
+            count=new_count,
+            dt=dt,
+            host=host,
+            client=client or "",
+            referer=referer or "",
+        )
+
+        return new_count
 
 
 def count_access_and_output_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
