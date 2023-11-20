@@ -61,7 +61,7 @@ def test_parse_request_in_case_of_request_method_is_invalid() -> None:
 
 def test_parse_request_in_case_of_height_in_query_string_is_invalid() -> None:
     datafile = "dummy.txt"
-    height = "DUMMY_HEIGHT"
+    height = "INVALID_HEIGHT"
 
     req = cgi.Request(
         env={
