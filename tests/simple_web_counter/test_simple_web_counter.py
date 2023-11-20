@@ -54,6 +54,43 @@ def test_count_and_record_access_datafileにデータが存在して新たなホ
     )
 
 
+def test_count_and_record_access_datafileにデータが存在して同一のホストandクライアントからのアクセスの場合(
+    mocker: MockFixture,
+) -> None:
+    read_last_row_from_datafile_mock = mocker.patch(
+        target="simple_web_counter.simple_web_counter.read_last_row_from_datafile"
+    )
+    read_last_row_from_datafile_mock.return_value = [
+        1,
+        DUMMY_DATETIME,
+        "DUMMY_HOST1",
+        "DUMMY_CLIENT1",
+        DUMMY_REFERER,
+    ]
+
+    get_datetime_now_mock = mocker.patch(
+        target="simple_web_counter.simple_web_counter.get_datetime_now"
+    )
+    get_datetime_now_mock.return_value = DUMMY_DATETIME
+
+    write_row_to_datafile_mock = mocker.patch(
+        target="simple_web_counter.simple_web_counter.write_row_to_datafile"
+    )
+
+    assert (
+        count_and_record_access(
+            datafile_path=DUMMY_DATAFILE_PATH,
+            timezone=None,
+            host="DUMMY_HOST1",
+            client="DUMMY_CLIENT1",
+            referer=DUMMY_REFERER,
+        )
+        == 1
+    )
+
+    write_row_to_datafile_mock.assert_not_called()
+
+
 def test_count_and_record_access_datafileにデータが存在しない場合(mocker: MockFixture) -> None:
     read_last_row_from_datafile_mock = mocker.patch(
         target="simple_web_counter.simple_web_counter.read_last_row_from_datafile"
