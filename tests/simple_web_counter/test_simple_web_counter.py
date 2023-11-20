@@ -1,13 +1,97 @@
 from datetime import datetime
 from pathlib import Path
 
+import pytest
 from pytest_mock import MockFixture
 
-from simple_web_counter.simple_web_counter import count_and_record_access
+from simple_web_counter.errors import Http400Error
+from simple_web_counter.simple_web_counter import count_and_record_access, parse_request
+from simple_web_counter.utils import cgi
 
+DUMMY_REQUEST_URI = "DUMMY_REQUEST_URI"
+DUMMY_USER_AGENT = "DUMMY_USER_AGENT"
+DUMMY_REMOTE_HOST = "DUMMY_REMOTE_HOST"
 DUMMY_DATETIME = datetime.fromisoformat("1970-01-01T00:00:00+09:00")
 DUMMY_REFERER = "DUMMY_REFERER"
 DUMMY_DATAFILE_PATH = Path("DUMMY_DATAFILE_PATH")
+
+
+def test_parse_request_in_case_of_request_correctly() -> None:
+    datafile = "dummy.txt"
+    height = 48
+
+    req = cgi.Request(
+        env={
+            "REQUEST_METHOD": "GET",
+            "REQUEST_URI": DUMMY_REQUEST_URI,
+            "QUERY_STRING": f"datafile={datafile}&height={height}",
+            "HTTP_USER_AGENT": DUMMY_USER_AGENT,
+            "HTTP_REFERER": DUMMY_REFERER,
+            "REMOTE_HOST": DUMMY_REMOTE_HOST,
+        }
+    )
+
+    assert parse_request(req=req) == (
+        DUMMY_REMOTE_HOST,
+        DUMMY_USER_AGENT,
+        DUMMY_REFERER,
+        datafile,
+        height,
+    )
+
+
+def test_parse_request_in_case_of_request_method_is_invalid() -> None:
+    datafile = "dummy.txt"
+    height = 48
+
+    req = cgi.Request(
+        env={
+            "REQUEST_METHOD": "POST",
+            "REQUEST_URI": DUMMY_REQUEST_URI,
+            "QUERY_STRING": f"datafile={datafile}&height={height}",
+            "HTTP_USER_AGENT": DUMMY_USER_AGENT,
+            "HTTP_REFERER": DUMMY_REFERER,
+            "REMOTE_HOST": DUMMY_REMOTE_HOST,
+        }
+    )
+
+    with pytest.raises(Http400Error):
+        parse_request(req=req)
+
+
+def test_parse_request_in_case_of_height_in_query_string_is_invalid() -> None:
+    datafile = "dummy.txt"
+    height = "DUMMY_HEIGHT"
+
+    req = cgi.Request(
+        env={
+            "REQUEST_METHOD": "GET",
+            "REQUEST_URI": DUMMY_REQUEST_URI,
+            "QUERY_STRING": f"datafile={datafile}&height={height}",
+            "HTTP_USER_AGENT": DUMMY_USER_AGENT,
+            "HTTP_REFERER": DUMMY_REFERER,
+            "REMOTE_HOST": DUMMY_REMOTE_HOST,
+        }
+    )
+
+    with pytest.raises(Http400Error):
+        parse_request(req=req)
+
+
+def test_parse_request_in_case_of_query_string_missing() -> None:
+    req = cgi.Request(
+        env={
+            "REQUEST_METHOD": "GET",
+            "REQUEST_URI": DUMMY_REQUEST_URI,
+            "QUERY_STRING": "",
+            "HTTP_USER_AGENT": DUMMY_USER_AGENT,
+            "HTTP_REFERER": DUMMY_REFERER,
+            "REMOTE_HOST": DUMMY_REMOTE_HOST,
+        }
+    )
+
+    with pytest.raises(Http400Error):
+        parse_request(req=req)
 
 
 def test_count_and_record_access_in_case_of_datafile_exists_and_the_access_is_from_new_host_and_client(
