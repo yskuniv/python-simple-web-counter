@@ -10,7 +10,9 @@ DUMMY_REFERER = "DUMMY_REFERER"
 DUMMY_DATAFILE_PATH = Path("DUMMY_DATAFILE_PATH")
 
 
-def test_count_and_record_access_datafileにデータが存在する場合(mocker: MockFixture) -> None:
+def test_count_and_record_access_datafileにデータが存在して新たなホストandクライアントからのアクセスの場合(
+    mocker: MockFixture,
+) -> None:
     read_last_row_from_datafile_mock = mocker.patch(
         target="simple_web_counter.simple_web_counter.read_last_row_from_datafile"
     )
