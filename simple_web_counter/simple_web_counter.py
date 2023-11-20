@@ -12,9 +12,7 @@ from simple_web_counter.utils.counter_helper import (
 )
 
 
-def count_access_and_output_counter_image_as_mime(
-    cfg: config.Config, req: cgi.Request
-) -> None:
+def count_access_and_output_image_as_mime(cfg: config.Config, req: cgi.Request) -> None:
     if req.method != cgi.RequestMethod.GET:
         raise  # TODO: raise a proper exception
 
@@ -67,4 +65,4 @@ def main() -> None:
     cfg = config.load()
     req = cgi.Request(env=dict(os.environ))
 
-    count_access_and_output_counter_image_as_mime(cfg, req)
+    count_access_and_output_image_as_mime(cfg, req)
