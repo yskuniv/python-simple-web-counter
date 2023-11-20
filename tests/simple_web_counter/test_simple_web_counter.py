@@ -8,10 +8,10 @@ from simple_web_counter.errors import Http400Error
 from simple_web_counter.simple_web_counter import count_and_record_access, parse_request
 from simple_web_counter.utils import cgi
 
-DUMMY_URI = "DUMMY_REQUEST_URI"
+DUMMY_URI = "DUMMY_URI"
 DUMMY_USER_AGENT = "DUMMY_USER_AGENT"
 DUMMY_REFERER = "DUMMY_REFERER"
-DUMMY_HOST = "DUMMY_REMOTE_HOST"
+DUMMY_HOST = "DUMMY_HOST"
 DUMMY_DATETIME = datetime.fromisoformat("1970-01-01T00:00:00+09:00")
 DUMMY_DATAFILE_PATH = Path("DUMMY_DATAFILE_PATH")
 
