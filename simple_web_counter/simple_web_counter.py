@@ -12,7 +12,7 @@ from simple_web_counter.utils.counter_helper import (
     write_row_to_datafile,
 )
 
-from .errors import Http400Error, Http404Error
+from .errors import Http400Error, Http404Error, HttpError
 
 
 def count_and_record_access(
@@ -58,34 +58,38 @@ def main() -> None:
     cfg = config.load()
     req = cgi.Request(env=dict(os.environ))
 
-    if req.method != cgi.RequestMethod.GET:
-        raise Http400Error()
-
-    host = get_host_info_from_request(req)
-    client = req.headers["User-Agent"]
-    referer = req.headers["Referer"]
-
     try:
-        datafile = req.params["datafile"][0]
-        height = int(req.params["height"][0])
-    except (IndexError, ValueError):
-        raise Http400Error()
+        if req.method != cgi.RequestMethod.GET:
+            raise Http400Error()
 
-    count = count_and_record_access(
-        datafile_path=Path(cfg.data.out_dir) / datafile,
-        timezone=cfg.datetime.timezone,
-        host=host,
-        client=client,
-        referer=referer,
-    )
+        host = get_host_info_from_request(req)
+        client = req.headers["User-Agent"]
+        referer = req.headers["Referer"]
 
-    image_mime = generate_counter_image_as_mime(
-        images_base_dir=Path(cfg.images.base_dir),
-        images_filename=cfg.images.filename,
-        height=height,
-        mode="RGB",
-        format="PNG",
-        count=count,
-    )
+        try:
+            datafile = req.params["datafile"][0]
+            height = int(req.params["height"][0])
+        except (IndexError, ValueError):
+            raise Http400Error()
 
-    print(image_mime, end="")
+        count = count_and_record_access(
+            datafile_path=Path(cfg.data.out_dir) / datafile,
+            timezone=cfg.datetime.timezone,
+            host=host,
+            client=client,
+            referer=referer,
+        )
+
+        image_mime = generate_counter_image_as_mime(
+            images_base_dir=Path(cfg.images.base_dir),
+            images_filename=cfg.images.filename,
+            height=height,
+            mode="RGB",
+            format="PNG",
+            count=count,
+        )
+
+        print(image_mime, end="")
+
+    except HttpError as e:
+        print(e, end="\r\n")
