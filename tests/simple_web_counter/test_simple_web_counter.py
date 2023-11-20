@@ -10,7 +10,7 @@ DUMMY_REFERER = "DUMMY_REFERER"
 DUMMY_DATAFILE_PATH = Path("DUMMY_DATAFILE_PATH")
 
 
-def test_count_and_record_access_datafileにデータが存在して新たなホストandクライアントからのアクセスの場合(
+def test_count_and_record_access_in_case_of_datafile_exists_and_the_access_is_from_new_host_and_client(
     mocker: MockFixture,
 ) -> None:
     read_last_row_from_datafile_mock = mocker.patch(
@@ -54,7 +54,7 @@ def test_count_and_record_access_datafileにデータが存在して新たなホ
     )
 
 
-def test_count_and_record_access_datafileにデータが存在して同一のホストandクライアントからのアクセスの場合(
+def test_count_and_record_access_in_case_of_datafile_exists_and_the_access_is_from_the_same_host_and_client(
     mocker: MockFixture,
 ) -> None:
     read_last_row_from_datafile_mock = mocker.patch(
@@ -91,7 +91,9 @@ def test_count_and_record_access_datafileにデータが存在して同一のホ
     write_row_to_datafile_mock.assert_not_called()
 
 
-def test_count_and_record_access_datafileにデータが存在しない場合(mocker: MockFixture) -> None:
+def test_count_and_record_access_in_case_of_datafile_does_not_exist(
+    mocker: MockFixture,
+) -> None:
     read_last_row_from_datafile_mock = mocker.patch(
         target="simple_web_counter.simple_web_counter.read_last_row_from_datafile"
     )
