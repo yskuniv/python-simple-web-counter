@@ -12,6 +12,8 @@ from simple_web_counter.utils.counter_helper import (
     write_row_to_datafile,
 )
 
+from .errors import Http400Error, Http404Error
+
 
 def count_and_record_access(
     datafile_path: Path,
@@ -20,7 +22,10 @@ def count_and_record_access(
     client: Optional[str],
     referer: Optional[str],
 ) -> int:
-    last_row = read_last_row_from_datafile(path=datafile_path)
+    try:
+        last_row = read_last_row_from_datafile(path=datafile_path)
+    except FileNotFoundError:
+        raise Http404Error()
 
     if last_row:
         last_count, _, last_host, last_client, _ = last_row
@@ -54,14 +59,17 @@ def main() -> None:
     req = cgi.Request(env=dict(os.environ))
 
     if req.method != cgi.RequestMethod.GET:
-        raise  # TODO: raise a proper exception
+        raise Http400Error()
 
     host = get_host_info_from_request(req)
     client = req.headers["User-Agent"]
     referer = req.headers["Referer"]
 
-    datafile = req.params["datafile"][0]
-    height = int(req.params["height"][0])
+    try:
+        datafile = req.params["datafile"][0]
+        height = int(req.params["height"][0])
+    except (IndexError, ValueError):
+        raise Http400Error()
 
     count = count_and_record_access(
         datafile_path=Path(cfg.data.out_dir) / datafile,
