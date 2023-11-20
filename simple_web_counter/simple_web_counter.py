@@ -78,18 +78,7 @@ def main() -> None:
     req = cgi.Request(env=dict(os.environ))
 
     try:
-        if req.method != cgi.RequestMethod.GET:
-            raise Http400Error()
-
-        host = get_host_info_from_request(req)
-        client = req.headers["User-Agent"]
-        referer = req.headers["Referer"]
-
-        try:
-            datafile = req.params["datafile"][0]
-            height = int(req.params["height"][0])
-        except (IndexError, ValueError):
-            raise Http400Error()
+        host, client, referer, datafile, height = parse_request(req=req)
 
         count = count_and_record_access(
             datafile_path=Path(cfg.data.out_dir) / datafile,
