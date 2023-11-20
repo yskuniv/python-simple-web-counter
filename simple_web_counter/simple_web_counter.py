@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 
 from simple_web_counter import config
 from simple_web_counter.utils import cgi
@@ -13,6 +13,25 @@ from simple_web_counter.utils.counter_helper import (
 )
 
 from .errors import Http400Error, Http404Error, HttpError
+
+
+def parse_request(
+    req: cgi.Request,
+) -> Tuple[str, Optional[str], Optional[str], str, int]:
+    if req.method != cgi.RequestMethod.GET:
+        raise Http400Error()
+
+    host = get_host_info_from_request(req)
+    client = req.headers["User-Agent"]
+    referer = req.headers["Referer"]
+
+    try:
+        datafile = req.params["datafile"][0]
+        height = int(req.params["height"][0])
+    except (IndexError, ValueError):
+        raise Http400Error()
+
+    return (host, client, referer, datafile, height)
 
 
 def count_and_record_access(
