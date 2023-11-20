@@ -28,7 +28,7 @@ def parse_request(
     try:
         datafile = req.params["datafile"][0]
         height = int(req.params["height"][0])
-    except (IndexError, ValueError):
+    except (KeyError, ValueError):
         raise Http400Error()
 
     return (host, client, referer, datafile, height)
