@@ -22,6 +22,7 @@ def parse_request(
         raise Http400Error()
 
     host = get_host_info_from_request(req)
+
     client = req.headers["User-Agent"]
     referer = req.headers["Referer"]
 
