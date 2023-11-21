@@ -175,7 +175,7 @@ def test_count_and_record_access_in_case_of_datafile_exists_and_the_access_is_fr
     write_row_to_datafile_mock.assert_not_called()
 
 
-def test_count_and_record_access_in_case_of_datafile_does_not_exist(
+def test_count_and_record_access_in_case_of_datafile_exists_but_the_content_is_blank(
     mocker: MockFixture,
 ) -> None:
     read_last_row_from_datafile_mock = mocker.patch(
