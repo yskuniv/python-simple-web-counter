@@ -54,7 +54,7 @@ def count_and_record_access(
         last_host = None
         last_client = None
 
-    # To prevent counting or recording accesses from the same host or client
+    # check if the access is from the same host/client as the previous access
     if host == last_host and client == last_client:
         return last_count
     else:
