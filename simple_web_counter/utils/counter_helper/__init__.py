@@ -1,5 +1,5 @@
 from .counter_helper import (
-    generate_counter_image_as_mime,
+    generate_image_of_count_as_mime,
     get_datetime_now,
     get_host_info_from_request,
     get_image_of_number,
@@ -8,7 +8,7 @@ from .counter_helper import (
 )
 
 __all__ = [
-    "generate_counter_image_as_mime",
+    "generate_image_of_count_as_mime",
     "get_datetime_now",
     "get_host_info_from_request",
     "get_image_of_number",

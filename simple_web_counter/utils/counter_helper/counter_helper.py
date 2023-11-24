@@ -56,7 +56,7 @@ def write_row_to_datafile(
     )
 
 
-def generate_counter_image_as_mime(
+def generate_image_of_count_as_mime(
     images_base_dir: Path,
     images_filename: str,
     height: int,
