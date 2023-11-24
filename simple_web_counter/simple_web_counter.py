@@ -5,7 +5,7 @@ from typing import Optional, Tuple
 from simple_web_counter import config
 from simple_web_counter.utils import cgi
 from simple_web_counter.utils.counter_helper import (
-    generate_counter_image_as_mime,
+    generate_image_of_count_as_mime,
     get_datetime_now,
     get_host_info_from_request,
     read_last_row_from_datafile,
@@ -89,7 +89,7 @@ def main() -> None:
             referer=referer,
         )
 
-        image_mime = generate_counter_image_as_mime(
+        image_mime = generate_image_of_count_as_mime(
             images_base_dir=Path(cfg.images.base_dir),
             images_filename=cfg.images.filename,
             height=height,
