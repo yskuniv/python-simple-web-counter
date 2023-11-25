@@ -4,13 +4,15 @@ from typing import Optional, Tuple
 
 from simple_web_counter import config
 from simple_web_counter.utils import cgi
-from simple_web_counter.utils.counter_helper import (
-    generate_image_of_count_as_mime,
-    get_datetime_now,
-    get_host_info_from_request,
+from simple_web_counter.utils.counter_helper.datafile import (
     read_last_row_from_datafile,
     write_row_to_datafile,
 )
+from simple_web_counter.utils.counter_helper.datetime import get_datetime_now
+from simple_web_counter.utils.counter_helper.image import (
+    generate_image_of_count_as_mime,
+)
+from simple_web_counter.utils.counter_helper.misc import get_host_info_from_request
 
 from .errors import Http400Error, Http404Error, HttpError
 
