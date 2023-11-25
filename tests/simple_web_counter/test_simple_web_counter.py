@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
+import helper
 import pytest
 from pytest_mock import MockFixture
 
@@ -97,24 +98,17 @@ def test_parse_request_in_case_of_query_string_missing() -> None:
 def test_count_and_record_access_in_case_of_datafile_exists_and_the_access_is_from_new_host_and_client(
     mocker: MockFixture,
 ) -> None:
-    read_last_row_from_datafile_mock = mocker.patch(
-        target="simple_web_counter.simple_web_counter.read_last_row_from_datafile"
-    )
-    read_last_row_from_datafile_mock.return_value = [
-        1,
-        DUMMY_DATETIME,
-        "DUMMY_HOST1",
-        "DUMMY_CLIENT1",
-        DUMMY_REFERER,
-    ]
-
-    get_datetime_now_mock = mocker.patch(
-        target="simple_web_counter.simple_web_counter.get_datetime_now"
-    )
-    get_datetime_now_mock.return_value = DUMMY_DATETIME
-
-    write_row_to_datafile_mock = mocker.patch(
-        target="simple_web_counter.simple_web_counter.write_row_to_datafile"
+    (
+        _,
+        write_row_to_datafile_mock,
+    ) = helper.mock_counter_helper_functions_with_datafile_return_value(
+        mocker=mocker,
+        date_time_now=DUMMY_DATETIME,
+        last_count=1,
+        last_datetime=DUMMY_DATETIME,
+        last_host="DUMMY_HOST1",
+        last_client="DUMMY_CLIENT1",
+        last_referer=DUMMY_REFERER,
     )
 
     assert (
@@ -141,24 +135,17 @@ def test_count_and_record_access_in_case_of_datafile_exists_and_the_access_is_fr
 def test_count_and_record_access_in_case_of_datafile_exists_and_the_access_is_from_the_same_host_and_client(
     mocker: MockFixture,
 ) -> None:
-    read_last_row_from_datafile_mock = mocker.patch(
-        target="simple_web_counter.simple_web_counter.read_last_row_from_datafile"
-    )
-    read_last_row_from_datafile_mock.return_value = [
-        1,
-        DUMMY_DATETIME,
-        "DUMMY_HOST1",
-        "DUMMY_CLIENT1",
-        DUMMY_REFERER,
-    ]
-
-    get_datetime_now_mock = mocker.patch(
-        target="simple_web_counter.simple_web_counter.get_datetime_now"
-    )
-    get_datetime_now_mock.return_value = DUMMY_DATETIME
-
-    write_row_to_datafile_mock = mocker.patch(
-        target="simple_web_counter.simple_web_counter.write_row_to_datafile"
+    (
+        _,
+        write_row_to_datafile_mock,
+    ) = helper.mock_counter_helper_functions_with_datafile_return_value(
+        mocker=mocker,
+        date_time_now=DUMMY_DATETIME,
+        last_count=1,
+        last_datetime=DUMMY_DATETIME,
+        last_host="DUMMY_HOST1",
+        last_client="DUMMY_CLIENT1",
+        last_referer=DUMMY_REFERER,
     )
 
     assert (
@@ -178,18 +165,12 @@ def test_count_and_record_access_in_case_of_datafile_exists_and_the_access_is_fr
 def test_count_and_record_access_in_case_of_datafile_exists_but_the_content_is_blank(
     mocker: MockFixture,
 ) -> None:
-    read_last_row_from_datafile_mock = mocker.patch(
-        target="simple_web_counter.simple_web_counter.read_last_row_from_datafile"
-    )
-    read_last_row_from_datafile_mock.return_value = None
-
-    get_datetime_now_mock = mocker.patch(
-        target="simple_web_counter.simple_web_counter.get_datetime_now"
-    )
-    get_datetime_now_mock.return_value = DUMMY_DATETIME
-
-    write_row_to_datafile_mock = mocker.patch(
-        target="simple_web_counter.simple_web_counter.write_row_to_datafile"
+    (
+        _,
+        write_row_to_datafile_mock,
+    ) = helper.mock_counter_helper_functions_without_datafile_return_value(
+        mocker=mocker,
+        date_time_now=DUMMY_DATETIME,
     )
 
     assert (
