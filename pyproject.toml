@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "simple-web-counter"
+version = "0.1.0"
+description = "A simple web counter written in Python."
+authors = ["ysk <ysk.univ.1007@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+multipart = "^0.2.4"
+Pillow = "^10.1.0"
+pytz = "^2023.3.post1"
+tomli = "^2.0.1"
+
+[tool.poetry.group.lint]
+optional = true
+
+[tool.poetry.group.lint.dependencies]
+black = "^23.11.0"
+flake8 = "^6.1.0"
+isort = "^5.12.0"
+mypy = "^1.7.0"
+types-pytz = "^2023.3.1.1"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.3"
+pytest-mock = "^3.12.0"
+
+[tool.poetry.scripts]
+"simple-web-counter.cgi" = "simple_web_counter:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

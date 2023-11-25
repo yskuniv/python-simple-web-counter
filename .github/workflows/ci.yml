@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  - push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install poetry
+          poetry install --with lint,test
+
+      - name: Lint with flake8
+        run: |
+          poetry run flake8 .
+
+      - name: Type check with mypy
+        run: |
+          poetry run mypy .
+
+      - name: Test with pytest
+        run: |
+          poetry run pytest
